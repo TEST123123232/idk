@@ -77,7 +77,7 @@ function serve() {
     })
 
     app.get('/api/messages/v2/get', (req, res) => {
-        res.send("[[{"Id":1,"FromPlayerId":1,"SentTime":"2020-07-27T05:29:02+00:00","Type":100,"Data":"TEST","RoomId":null,"PlayerEventId":null}]]]")
+        res.send("[{"Id":1,"FromPlayerId":1,"SentTime":"2020-07-27T05:29:02+00:00","Type":100,"Data":"TEST","RoomId":null,"PlayerEventId":null}]]")
     })
 
     app.get('/api/equipment/v1/getUnlocked', (req, res) => {
