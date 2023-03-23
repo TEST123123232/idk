@@ -2,6 +2,7 @@ const chalk = require('chalk') // colored text
 const express = require('express') //express.js - the web server
 const morgan = require('morgan') //for webserver output
 const app = express()
+const Sequelize = require('sequelize');
 const path = require("path")
 app.use(morgan(`${chalk.green("[API]")} :method ":url" :status - :response-time ms`))
 const { userid, username } = require('../../user-info/user.json')
@@ -34,8 +35,10 @@ function serve() {
         res.sendFile(path.resolve(`${__dirname}/../../user-info/ProfileImage.png`))
     })
 
-    app.get('/api/players/v1/*', (req, res) => {
-        res.send(require("../../shared/getorcreate.js").GetOrCreate())
+    app.get(`/api/players/v1/*`, async (req, res) => {
+        let body = await require("./datamanager.js").getProfile(uid)
+        body = JSON.parse(body)
+        res.send(JSON.stringify(body))
     })
 
     app.get('/api/avatar/v3/items', (req, res) => {
@@ -108,8 +111,19 @@ function serve() {
     /*
         POST REQUESTS
     */
-    app.post('/api/platformlogin/v1/profiles', (req, res) => {
-        res.send(require("../../shared/getorcreate.js").GetOrCreateArray())
+    app.post('*/api/platformlogin/v*/profiles', async (req, res) => {
+        let body = '';
+        req.setEncoding('utf8');
+        req.on('data', (chunk) => {
+            body += chunk;
+        });
+
+        req.on('end', async () => {
+            body = body.slice(32) //this is the user's Steam ID
+            body = await require("./datamanager.js").getProfile(body)
+            body = JSON.parse(body)
+            res.send(JSON.stringify([body]))
+        })
     })
 
     //For compatibility with some early 2017 builds
