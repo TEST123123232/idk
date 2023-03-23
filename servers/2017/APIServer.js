@@ -2,7 +2,6 @@ const chalk = require('chalk') // colored text
 const express = require('express') //express.js - the web server
 const morgan = require('morgan') //for webserver output
 const app = express()
-const Sequelize = require('sequelize');
 const path = require("path")
 app.use(morgan(`${chalk.green("[API]")} :method ":url" :status - :response-time ms`))
 const { userid, username } = require('../../user-info/user.json')
